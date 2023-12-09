@@ -1,4 +1,4 @@
-name: Docker Deployment and Health Check
+name: ITB Launch
 
 on:
   push:
