@@ -1,5 +1,5 @@
 ###
-@host=http://localhost:9002/fhir/server/api
+@host=http://localhost:9001/fhir/server/api
 
 POST {{host}}/AllergyIntolerance HTTP/1.1
 Content-Type: application/json+fhir
