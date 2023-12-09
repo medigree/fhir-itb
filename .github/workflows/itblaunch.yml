@@ -1,0 +1,38 @@
+name: Docker Deployment and Health Check
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  deploy-and-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      
+      - name: Set up Docker Compose
+        run: |
+          sudo curl -L "https://github.com/docker/compose/releases/download/v2.2.3/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+
+      - name: Deploy with Docker Compose
+        run: docker-compose up -d
+
+      - name: Check localhost:9001
+        run: |
+          until curl --output /dev/null --silent --head --fail http://localhost:9001; do
+              printf '.'
+              sleep 5
+          done
+
+      - name: Check localhost:9002
+        run: |
+          response=$(curl --write-out '%{http_code}' --silent --output /dev/null http://localhost:9002)
+          if [ "$response" -ne 200 ]; then
+              echo "Service at localhost:9002 did not return 200 OK"
+              exit 1
+          fi
