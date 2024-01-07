@@ -85,7 +85,7 @@ services:
       - ig_url=https://ehealth.fgov.be/standards/fhir/allergy/
       - ig_code=allergy
       - ig_package_name=hl7.fhir.be.allergy
-      - ig_version=1.0.1
+      - ig_version=1.2.0
       - fhir_version=R4
       - server_port=8080
       - static_server_port=8080
@@ -99,7 +99,7 @@ services:
       - hapi.fhir.implementationguides.fhir_r4_core.version=4.0.1
       - hapi.fhir.implementationguides.fhir_r4_core.url=http://hl7.org/fhir/R4/hl7.fhir.r4.core.tgz
       - hapi.fhir.implementationguides.currentig.name=hl7.fhir.be.allergy
-      - hapi.fhir.implementationguides.currentig.version=1.0.1
+      - hapi.fhir.implementationguides.currentig.version=1.2.0
       - hapi.fhir.implementationguides.currentig.url=https://ehealth.fgov.be/standards/fhir/allergy/
       - hapi.fhir.ig_runtime_upload_enabled=true
       - hapi.fhir.custom_content_path=/custom
@@ -119,7 +119,7 @@ services:
       - ig_url=https://ehealth.fgov.be/standards/fhir/allergy/
       - ig_code=allergy
       - ig_package_name=hl7.fhir.be.allergy
-      - ig_version=1.0.1
+      - ig_version=1.2.0
       - fhir_version=R4
       - server_port=8080
       - static_server_port=9003
@@ -133,7 +133,7 @@ services:
       - hapi.fhir.implementationguides.fhir_r4_core.version=4.0.1
       - hapi.fhir.implementationguides.fhir_r4_core.url=http://hl7.org/fhir/R4/hl7.fhir.r4.core.tgz
       - hapi.fhir.implementationguides.currentig.name=hl7.fhir.be.allergy
-      - hapi.fhir.implementationguides.currentig.version=1.0.1
+      - hapi.fhir.implementationguides.currentig.version=1.2.0
       - hapi.fhir.implementationguides.currentig.url=https://ehealth.fgov.be/standards/fhir/allergy/
       - hapi.fhir.ig_runtime_upload_enabled=true
       - hapi.fhir.custom_content_path=/custom
