@@ -5,7 +5,7 @@ GET {{host}}/metadata HTTP/1.1
 Accept: application/fhir+json;fhirVersion=4.0
 Content-Type: application/fhir+json;fhirVersion=4.0
 
-###
+### TEST 1: Send allergy
 POST {{host}}/AllergyIntolerance HTTP/1.1
 Accept: application/fhir+json;fhirVersion=4.0
 Content-Type: application/fhir+json;fhirVersion=4.0
