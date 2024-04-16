@@ -4,7 +4,6 @@ import com.gitb.ms.Void;
 import com.gitb.ms.*;
 import com.gitb.tr.TestResultType;
 import eu.europa.ec.fhir.handlers.FhirClient;
-import eu.europa.ec.fhir.state.ExpectedManualCheck;
 import eu.europa.ec.fhir.state.ExpectedPost;
 import eu.europa.ec.fhir.state.StateManager;
 import eu.europa.ec.fhir.utils.Utils;
@@ -128,7 +127,6 @@ public class MessagingServiceImpl implements MessagingService {
         LOG.info("Called 'receive' from test session [{}].", receiveRequest.getSessionId());
         var type = utils.getRequiredString(receiveRequest.getInput(), "type");
         if ("postToValidate".equals(type)) {
-            var endpoint = utils.getRequiredString(receiveRequest.getInput(), "endpoint");
             var expectedPatient = utils.getRequiredString(receiveRequest.getInput(), "patient");
             stateManager.recordExpectedPost(new ExpectedPost(
                     receiveRequest.getSessionId(),
@@ -136,14 +134,7 @@ public class MessagingServiceImpl implements MessagingService {
                     receiveRequest.getCallId(),
                     // The callback address extracted here will be used later on to notify the Test Bed.
                     utils.getReplyToAddressFromHeaders(wsContext).orElseThrow(),
-                    expectedPatient,
-                    endpoint
-            ));
-        } else if ("manualCheck".equals(type)) {
-            stateManager.recordExpectedManualCheck(new ExpectedManualCheck(
-                    receiveRequest.getSessionId(),
-                    receiveRequest.getCallId(),
-                    utils.getReplyToAddressFromHeaders(wsContext).orElseThrow()
+                    expectedPatient
             ));
         } else {
             throw new IllegalArgumentException("Unsupported type [%s] for 'receive' operation.".formatted(type));
@@ -189,7 +180,7 @@ public class MessagingServiceImpl implements MessagingService {
     @Override
     public Void finalize(FinalizeRequest finalizeRequest) {
         LOG.info("Finalising test session [{}].", finalizeRequest.getSessionId());
-         stateManager.destroySession(finalizeRequest.getSessionId());
+        stateManager.destroySession(finalizeRequest.getSessionId());
         return new Void();
     }
 

@@ -43,6 +43,20 @@ public class BeanConfig {
     }
 
     /**
+     * The processing service endpoint.
+     *
+     * @return The endpoint.
+     */
+    @Bean
+    public EndpointImpl processingService(Bus cxfBus, ProcessingServiceImpl serviceImplementation) {
+        EndpointImpl endpoint = new EndpointImpl(cxfBus, serviceImplementation);
+        endpoint.setServiceName(new QName("http://www.gitb.com/ps/v1/", "ProcessingServiceService"));
+        endpoint.setEndpointName(new QName("http://www.gitb.com/ps/v1/", "ProcessingServicePort"));
+        endpoint.publish("/process");
+        return endpoint;
+    }
+
+    /**
      * Jackson object mapper to process JSON content.
      *
      * @return The mapper.

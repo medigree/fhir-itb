@@ -15,6 +15,12 @@
     </params>       
     <steps>
         <!--
+            Pass test configuration to the supporting service.
+        -->
+        <process desc="Setup configuration" handler="$DOMAIN{processingServiceAddress}" operation="init">
+            <input name="endpoint">$DOMAIN{embeddedFhirServerEndpoint}</input>
+        </process>
+        <!--
             Here we set the "if" step as hidden but with an explicitly visible "then" block. The result of this is to show only
             the contained steps from the "then" block without an extra container for the "if". This is purely to make for a visually
             simpler execution diagram.

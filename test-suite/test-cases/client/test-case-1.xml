@@ -61,7 +61,6 @@
             -->
             <receive id="receiveAllergy" desc="Submit allergy" from="client" to="server" handler="$DOMAIN{messagingServiceAddress}">
                 <input name="type">"postToValidate"</input>
-                <input name="endpoint">$DOMAIN{embeddedFhirServerEndpoint}</input>
                 <input name="patient">"Patient/example"</input>
             </receive>
             <!-- 
@@ -91,18 +90,13 @@
                 <input name="expectedstring">$expectedCode</input>
             </verify>
             <!--
-                In this step we want to pause and wait for an administrator's approval of the screenshot. To do this we use a hidden "receive" step as we just want
-                the Test Bed to pause until the approval is provided. We also add a maximum timeout here to ensure the test session does not wait indefinitely.
-
-                In the future the Test Bed will support an "administrator interaction" step that will likely simplify this and remove the need of delegating to an external
-                service and doing a "receive".
-
-                Implementation-wise, we don't really pass inputs in this call as the administrator will just be prompted to check the test session on the Test Bed. We could
-                however make this much more elaborate by e.g. sharing as part of the inputs the actual screenshot to check.
+                In this step we want to pause and wait for an administrator's approval of the screenshot. To do this we use an "interact" step set with "admin" as true.
             -->
-            <receive id="receiveApproval" hidden="true" desc="Request administrator approval" from="server" to="server" timeout="$DOMAIN{manualCheckTimeout}" timeoutIsError="true" handler="$DOMAIN{messagingServiceAddress}">
-                <input name="type">"manualCheck"</input>
-            </receive>
+            <interact id="receiveApproval" desc="Request administrator approval" admin="true">
+                <instruct desc="Provided processing proof">$userData{screenshot}</instruct>
+                <request desc="Test result" options="Approved, Rejected" name="result"/>
+                <request desc="Comments" inputType="MULTILINE_TEXT" name="comments"/>            
+            </interact>
             <!-- 
                 This is a nice example of doing simple conditional logic using XPath 3. In this case depending on whether the administrator approved we adapt
                 the outcome of the next reporting step accordingly (stored in a variable to be referenced later).
