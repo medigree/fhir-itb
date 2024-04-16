@@ -127,7 +127,6 @@ public class MessagingServiceImpl implements MessagingService {
         LOG.info("Called 'receive' from test session [{}].", receiveRequest.getSessionId());
         var type = utils.getRequiredString(receiveRequest.getInput(), "type");
         if ("postToValidate".equals(type)) {
-            var endpoint = utils.getRequiredString(receiveRequest.getInput(), "endpoint");
             var expectedPatient = utils.getRequiredString(receiveRequest.getInput(), "patient");
             stateManager.recordExpectedPost(new ExpectedPost(
                     receiveRequest.getSessionId(),
@@ -135,8 +134,7 @@ public class MessagingServiceImpl implements MessagingService {
                     receiveRequest.getCallId(),
                     // The callback address extracted here will be used later on to notify the Test Bed.
                     utils.getReplyToAddressFromHeaders(wsContext).orElseThrow(),
-                    expectedPatient,
-                    endpoint
+                    expectedPatient
             ));
         } else {
             throw new IllegalArgumentException("Unsupported type [%s] for 'receive' operation.".formatted(type));
@@ -182,7 +180,7 @@ public class MessagingServiceImpl implements MessagingService {
     @Override
     public Void finalize(FinalizeRequest finalizeRequest) {
         LOG.info("Finalising test session [{}].", finalizeRequest.getSessionId());
-         stateManager.destroySession(finalizeRequest.getSessionId());
+        stateManager.destroySession(finalizeRequest.getSessionId());
         return new Void();
     }
 

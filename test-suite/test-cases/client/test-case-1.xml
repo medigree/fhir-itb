@@ -61,7 +61,6 @@
             -->
             <receive id="receiveAllergy" desc="Submit allergy" from="client" to="server" handler="$DOMAIN{messagingServiceAddress}">
                 <input name="type">"postToValidate"</input>
-                <input name="endpoint">$DOMAIN{embeddedFhirServerEndpoint}</input>
                 <input name="patient">"Patient/example"</input>
             </receive>
             <!-- 
