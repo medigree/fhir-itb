@@ -1,13 +1,11 @@
 package eu.europa.ec.fhir.state;
 
 import com.gitb.core.LogLevel;
-import com.gitb.core.ValueEmbeddingEnumeration;
 import com.gitb.tr.TAR;
 import com.gitb.tr.TestResultType;
 import eu.europa.ec.fhir.gitb.TestBedNotifier;
 import eu.europa.ec.fhir.handlers.RequestResult;
 import eu.europa.ec.fhir.utils.Utils;
-import io.micrometer.common.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,63 +54,6 @@ public class StateManager {
     public void destroySession(String testSessionIdentifier) {
         synchronized (lock) {
             testSessions.remove(testSessionIdentifier);
-        }
-    }
-
-    /**
-     * Return the information on pending manual checks.
-     *
-     * @return The list of checks to be completed.
-     */
-    public List<ExpectedManualCheck> getExpectedManualChecks() {
-        synchronized (lock) {
-            return testSessions.values().stream().map(sessionData -> (ExpectedManualCheck) sessionData.get(MANUAL_CHECK)).filter(Objects::nonNull).toList();
-        }
-    }
-
-    /**
-     * Complete a manual check for the given test session.
-     *
-     * @param testSessionId The test session ID.
-     * @param result The check result.
-     * @param comments The administrator's comments.
-     */
-    public void completeExpectedManualCheck(String testSessionId, String result, String comments) {
-        synchronized (lock) {
-            var sessionState = testSessions.get(testSessionId);
-            if (sessionState != null) {
-                var sessionValue = sessionState.remove(MANUAL_CHECK);
-                if (sessionValue instanceof ExpectedManualCheck expectedCheck) {
-                    // Log the result.
-                    addToSessionLog(expectedCheck.testSessionId(), expectedCheck.callbackAddress(), LogLevel.INFO, "Manual check result: %s.".formatted(result));
-                    // Create a report and record the check result and comments (if provided).
-                    TAR report = utils.createReport(TestResultType.SUCCESS);
-                    report.getContext().getItem().add(utils.createAnyContentSimple("result", result, ValueEmbeddingEnumeration.STRING));
-                    if (StringUtils.isNotBlank(comments)) {
-                        report.getContext().getItem().add(utils.createAnyContentSimple("comments", comments, ValueEmbeddingEnumeration.STRING));
-                    }
-                    // Notify the Test Bed to complete the pending 'receive' step.
-                    testBedNotifier.notifyTestBed(expectedCheck.testSessionId(), expectedCheck.callId(), expectedCheck.callbackAddress(), report);
-                }
-            }
-        }
-    }
-
-    /**
-     * Record a new expected manual check by an administrator.
-     * <p/>
-     * We only record one such expectation for a test session.
-     *
-     * @param expected The check's information.
-     */
-    public void recordExpectedManualCheck(ExpectedManualCheck expected) {
-        synchronized (lock) {
-            var sessionState = testSessions.get(expected.testSessionId());
-            if (sessionState != null) {
-                sessionState.put(MANUAL_CHECK, expected);
-                // Add also a message to the test session's log.
-                addToSessionLog(expected.testSessionId(), expected.callbackAddress(), LogLevel.INFO, "Waiting for administrator's manual check of the test session.");
-            }
         }
     }
 

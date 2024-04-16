@@ -4,7 +4,6 @@ import com.gitb.ms.Void;
 import com.gitb.ms.*;
 import com.gitb.tr.TestResultType;
 import eu.europa.ec.fhir.handlers.FhirClient;
-import eu.europa.ec.fhir.state.ExpectedManualCheck;
 import eu.europa.ec.fhir.state.ExpectedPost;
 import eu.europa.ec.fhir.state.StateManager;
 import eu.europa.ec.fhir.utils.Utils;
@@ -138,12 +137,6 @@ public class MessagingServiceImpl implements MessagingService {
                     utils.getReplyToAddressFromHeaders(wsContext).orElseThrow(),
                     expectedPatient,
                     endpoint
-            ));
-        } else if ("manualCheck".equals(type)) {
-            stateManager.recordExpectedManualCheck(new ExpectedManualCheck(
-                    receiveRequest.getSessionId(),
-                    receiveRequest.getCallId(),
-                    utils.getReplyToAddressFromHeaders(wsContext).orElseThrow()
             ));
         } else {
             throw new IllegalArgumentException("Unsupported type [%s] for 'receive' operation.".formatted(type));
