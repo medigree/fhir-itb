@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>be.smals.vas.integrations</groupId>
+  <artifactId>vas-integrations-pseudonymisation</artifactId>
+  <versioning>
+    <versions>
+      <version>0.7.0-SNAPSHOT</version>
+    </versions>
+    <lastUpdated>20240611122026</lastUpdated>
+  </versioning>
+</metadata>

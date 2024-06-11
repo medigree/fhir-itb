@@ -68,6 +68,12 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>be.smals.vas.integrations</groupId>
+            <artifactId>vas-integrations-pseudonymisation</artifactId>
+            <version>0.7.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -94,5 +100,18 @@
         </plugins>
         <finalName>fhir-test-services</finalName>
     </build>
+
+    <repositories>
+
+        <repository>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+            <id>local-maven-repo</id>
+            <url>file:${project.basedir}${file.separator}local-maven-repo</url>
+        </repository>
+
+    </repositories>
 
 </project>
