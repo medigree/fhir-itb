@@ -37,7 +37,9 @@ services:
       # If you deploy the fhir-test-services outside the docker-compose service you would need to adapt this. For
       # example you would add a port mapping for port 8080 (this is currently not mapped to the host) and then
       # refer to an address such as "localhost".
-      - gitb.messaging.callbackURL=http://gitb-srv:8080/itbsrv/MessagingClient
+      - gitb.messaging.callbackURL=http://localhost:8080/itbsrv/MessagingClient
+    ports:
+      - 8080:8080
   gitb-ui:
     # The Test Bed's UI.
     image: isaitb/gitb-ui:nightly
@@ -67,15 +69,15 @@ services:
   #
   # Test Bed core components - END.
   #
-  fhir-test-services:
-    # The fhir-test-services component are the extension services supporting our test cases. Note how we have a "build" definition
-    # here as we will build the component from the sources provided in directory "./fhir-test-services".
-    # For the endpoints exposed by this service check thge project's README.
-    build:
-      context: ./fhir-test-services
-    restart: unless-stopped
-    ports:
-      - "9002:8181"
+#  fhir-test-services:
+#    # The fhir-test-services component are the extension services supporting our test cases. Note how we have a "build" definition
+#    # here as we will build the component from the sources provided in directory "./fhir-test-services".
+#    # For the endpoints exposed by this service check thge project's README.
+#    build:
+#      context: ./fhir-test-services
+#    restart: unless-stopped
+#    ports:
+#      - "9002:8181"
   fhir-server:
     # This is the internal FHIR server that is used by the Test Bed to validate FHIR client test cases. It has no host port mappings 
     # as this is only expected to be used by the test engine directly.
@@ -88,7 +90,7 @@ services:
       - ig_version=1.2.0
       - fhir_version=R4
       - server_port=8080
-      - static_server_port=8080
+      - static_server_port=9004
       - server_name=AllergyTB      
       - hapi.fhir.allow_multiple_delete=true
       - hapi.fhir.server_address=localhost:8080
@@ -107,6 +109,8 @@ services:
     volumes:
       - ./config/fhir/custom:/custom
       - ./config/fhir/apps:/apps
+    ports:
+      - 9004:8080
   fhir-server-sut:
     # This is a second FHIR server that is used as part of the PoC to serve as a system under test (SUT) for the test
     # cases verifying FHIR servers.
@@ -122,7 +126,7 @@ services:
       - ig_version=1.2.0
       - fhir_version=R4
       - server_port=8080
-      - static_server_port=9003
+      - static_server_port=9005
       - server_name=AllergyTB      
       - hapi.fhir.allow_multiple_delete=true
       - hapi.fhir.server_address=localhost:8080
@@ -142,4 +146,4 @@ services:
       - ./config/fhir/custom:/custom
       - ./config/fhir/apps:/apps
     ports:
-      - 9003:8080
+      - 9005:8080
