@@ -37,9 +37,7 @@ services:
       # If you deploy the fhir-test-services outside the docker-compose service you would need to adapt this. For
       # example you would add a port mapping for port 8080 (this is currently not mapped to the host) and then
       # refer to an address such as "localhost".
-      - gitb.messaging.callbackURL=http://gitb-srv:8000/itbsrv/MessagingClient
-    ports:
-      - 8080:8080
+      - gitb.messaging.callbackURL=http://gitb-srv:8080/itbsrv/MessagingClient
   gitb-ui:
     # The Test Bed's UI.
     image: isaitb/gitb-ui:nightly
