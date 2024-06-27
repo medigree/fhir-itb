@@ -10,13 +10,6 @@
         <gitb:actor id="server" role="SUT"/>
     </actors>
     <steps stopOnError="true">
-
-        <process output="pseudonym" handler="$DOMAIN{processingServiceAddress}" operation="generatePseudonym">
-            <input name="ehealthCertificate">$SYSTEM{ehealthCertificate}</input> <!-- Base64 encoded certificate file -->
-        </process>
-
-        <log>"Generated pseudonym: "||$pseudonym</log>
-
         <group title="Setup" desc="Test session setup" collapsed="true">
             <call path="scriptlets/setupData.xml">
                 <input name="ingestData">$SYSTEM{ingestDataPerTestSession}</input>
